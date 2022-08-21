@@ -1,7 +1,9 @@
 <template>
-  <h1>Home</h1>
-  Game: {{$route.params.gameId}}
-  {{gameContent}}
+  <q-page class="flex flex-center">
+    <h1>Home</h1>
+    Game: {{$route.params.gameId}}
+    {{gameContent}}
+  </q-page>
 </template>
 
 <script>
