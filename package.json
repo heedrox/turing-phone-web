@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prepare": "husky install"
   },
   "dependencies": {
     "vue": "^3.2.37",
@@ -20,7 +21,8 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-vue": "^9.3.0",
     "pre-commit": "^1.2.2",
-    "vite": "^3.0.7"
+    "vite": "^3.0.7",
+    "husky": "^8.0.0"
   },
   "pre-commit": [
     "lint"
