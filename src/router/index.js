@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import StartGame from '../pages/StartGame.vue';
-import Home from '../pages/Home.vue';
+import HomePage from '../pages/HomePage.vue';
 
 const routes = [
-  { path: '/', component: Home },
+  { path: '/', component: HomePage },
   { path: '/game/:gameId/:numberOfPlayers/player/:numPlayer/:namePlayer/start', component: StartGame },
 ];
 
