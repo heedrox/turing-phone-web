@@ -1,15 +1,21 @@
 import {
-  collection, query, limit, doc, getDoc,
+  doc, getDoc, setDoc,
 } from 'firebase/firestore/lite';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { db } from './firebase/index';
+import config from './firebase/config';
 
 const init = async () => {
-  await query(collection(db, 'cities'), limit(2));
+  const auth = getAuth();
+  await signInWithEmailAndPassword(auth, config.custom.auth.email, config.custom.auth.password);
 };
 
 const getGame = async (gameId) => {
   const theDoc = await doc(db, 'games', gameId);
   const docSnap = await getDoc(theDoc);
+  if (!docSnap.exists()) {
+    await setDoc(theDoc, { });
+  }
   return docSnap.exists() ? docSnap.data() : null;
 };
 
