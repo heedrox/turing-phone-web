@@ -1,7 +1,8 @@
+import db from '../db';
+
 const QuestionAdd = {
   execute: async (gameId, playerName, question) => {
-    // eslint-disable-next-line no-console
-    console.log(gameId, playerName, question);
+    await db.setQuestion(gameId, playerName, question);
   },
 };
 

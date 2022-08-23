@@ -25,8 +25,18 @@ const onGameChange = (gameId, callback) => {
   });
 };
 
+const setQuestion = async (gameId, playerName, question) => {
+  const theDoc = await doc(db, `games/${gameId}/questions`, playerName)
+  await setDoc(theDoc, {
+    playerName,
+    question,
+    possibleAnswers: [],
+  });
+};
+
 export default {
   init,
   getGame,
   onGameChange,
+  setQuestion,
 };
