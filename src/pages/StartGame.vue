@@ -1,8 +1,10 @@
+<script setup>
+import QuestionForm from '../components/QuestionForm.vue';
+</script>
+
 <template>
-  <q-page class="flex flex-center">
-    <h1>Home</h1>
-    Game: {{$route.params.gameId}}
-    {{gameContent}}
+  <q-page >
+    <QuestionForm />
   </q-page>
 </template>
 
@@ -21,6 +23,9 @@ export default {
   async mounted() {
     const gameId = this.$route.params.gameId.toLowerCase();
     this.gameContent = await db.getGame(gameId);
+    db.onGameChange(gameId, (gameContent) => {
+      this.gameContent = gameContent;
+    });
   },
 };
 </script>

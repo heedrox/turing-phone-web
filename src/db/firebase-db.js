@@ -1,6 +1,6 @@
 import {
-  doc, getDoc, setDoc,
-} from 'firebase/firestore/lite';
+  doc, getDoc, setDoc, onSnapshot,
+} from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { db } from './firebase/index';
 import config from './firebase/config';
@@ -19,7 +19,14 @@ const getGame = async (gameId) => {
   return docSnap.exists() ? docSnap.data() : null;
 };
 
+const onGameChange = (gameId, callback) => {
+  onSnapshot(doc(db, 'games', gameId), (theDoc) => {
+    callback(theDoc.data());
+  });
+};
+
 export default {
   init,
   getGame,
+  onGameChange,
 };
