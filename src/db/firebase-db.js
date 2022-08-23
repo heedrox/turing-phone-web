@@ -10,11 +10,11 @@ const init = async () => {
   await signInWithEmailAndPassword(auth, config.custom.auth.email, config.custom.auth.password);
 };
 
-const getGame = async (gameId) => {
+const getGame = async (gameId, defaultDataIfNotExists = {}) => {
   const theDoc = await doc(db, 'games', gameId);
   const docSnap = await getDoc(theDoc);
   if (!docSnap.exists()) {
-    await setDoc(theDoc, { });
+    await setDoc(theDoc, defaultDataIfNotExists);
   }
   return docSnap.exists() ? docSnap.data() : null;
 };

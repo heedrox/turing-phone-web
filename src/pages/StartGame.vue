@@ -4,7 +4,7 @@ import QuestionForm from '../components/QuestionForm.vue';
 
 <template>
   <q-page >
-    <QuestionForm />
+    <QuestionForm :playerName="playerName" :gameContent="gameContent"/>
   </q-page>
 </template>
 
@@ -18,11 +18,16 @@ export default {
       gameContent: {
         type: Object,
       },
+      playerName: '',
     };
   },
   async mounted() {
     const gameId = this.$route.params.gameId.toLowerCase();
-    this.gameContent = await db.getGame(gameId);
+    this.playerName = this.$route.params.playerName;
+    this.gameContent = await db.getGame(gameId, {
+      gameId,
+      numberOfPlayers: this.$route.params.numberOfPlayers,
+    });
     db.onGameChange(gameId, (gameContent) => {
       this.gameContent = gameContent;
     });

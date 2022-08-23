@@ -1,9 +1,22 @@
 <script setup>
-import { useRoute } from 'vue-router';
+import { ref, toRefs, computed } from 'vue';
+import QuestionAdd from '../use-cases/question-add';
 
 const capitalize = (name) => name.charAt(0).toUpperCase() + name.toLowerCase().slice(1);
 
-const capitalizedName = capitalize(useRoute().params.namePlayer);
+const props = defineProps({
+  playerName: String,
+  gameContent: Object,
+});
+const { playerName, gameContent } = toRefs(props);
+
+const capitalizedName = computed(() => capitalize(playerName.value));
+
+const question = ref('');
+
+const sendQuestion = async () => {
+  await QuestionAdd.execute(gameContent.value.gameId, playerName.value, question.value);
+};
 </script>
 <template>
   <div class="q-ma-md">
@@ -22,24 +35,9 @@ const capitalizedName = capitalize(useRoute().params.namePlayer);
         label="SEND"
         icon-right="send"
         color="primary"
+        @click="sendQuestion"
         glossy
         outlined
     />
   </div>
 </template>
-
-<script>
-export default {
-  name: 'QuestionForm',
-  data() {
-    return {
-      question: '',
-    };
-  },
-  methods: {
-    capitalize(name) {
-      return name.charAt(0).toUpperCase() + name.toLowerCase().slice(1)
-    },
-  },
-}
-</script>
