@@ -1,5 +1,5 @@
 import {
-  doc, getDoc, setDoc, onSnapshot,
+  doc, getDoc, setDoc, onSnapshot, updateDoc
 } from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { db } from './firebase/index';
@@ -25,12 +25,16 @@ const onGameChange = (gameId, callback) => {
   });
 };
 
-const setQuestion = async (gameId, playerName, question) => {
-  const theDoc = await doc(db, `games/${gameId}/questions`, playerName)
-  await setDoc(theDoc, {
-    playerName,
-    question,
-    possibleAnswers: [],
+const setQuestion = async (gameId, playerName, question, aiAnswer) => {
+  const theDoc = await doc(db, `games/${gameId}`);
+  await updateDoc(theDoc, {
+    [`questions.${playerName}`]: {
+      playerName,
+      question,
+      possibleAnswers: [
+        { fromAi: true, fromPlayer: false, answer: aiAnswer },
+      ],
+    },
   });
 };
 

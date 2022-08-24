@@ -7,8 +7,5 @@ import firebaseConfig from './config';
 // Your web index's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 // Initialize Firebase
-export const app = initializeApp({
-  ...firebaseConfig,
-  custom: undefined,
-});
+export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
