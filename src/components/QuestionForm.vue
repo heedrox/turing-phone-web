@@ -1,40 +1,43 @@
 <script setup>
-import { ref, toRefs, computed, watch } from 'vue'
-import QuestionAdd from '../use-cases/question-add'
+import {
+  ref, toRefs, computed, watch,
+} from 'vue';
+import QuestionAdd from '../use-cases/question-add';
+import prettyName from '../lib/pretty-name';
 
 const STATES = {
   NOT_LOADED: 'NOT_LOADED',
   NOT_SENT: 'NOT_SENT',
   SENDING: 'SENDING',
   SENT: 'SENT',
-}
+};
 
-const capitalize = (name) => name.charAt(0).toUpperCase() + name.toLowerCase().slice(1);
-const playerMadeQuestion = (game, playerName) => game.questions
+const playerMadeQuestion = (game, playerName) => game
+    && game.questions
     && game.questions[playerName]
     && game.questions[playerName].question;
 
 const getState = (game, playerName) => {
-  if (!game.gameId) return STATES.NOT_LOADED;
+  if (!game || !game.gameId) return STATES.NOT_LOADED;
   if (playerMadeQuestion(game, playerName)) {
     return STATES.SENT;
   }
   return STATES.NOT_SENT;
-}
+};
 
 const props = defineProps({
   playerName: String,
   gameContent: Object,
 });
-const { playerName, gameContent } = toRefs(props)
+const { playerName, gameContent } = toRefs(props);
 
-const capitalizedName = computed(() => capitalize(playerName.value))
+const capitalizedName = computed(() => prettyName(playerName.value));
 
 const question = ref('');
 const currentState = ref(STATES.NOT_LOADED);
 
 const sendQuestion = async () => {
-  await QuestionAdd.execute(gameContent.value.gameId, playerName.value, question.value)
+  await QuestionAdd.execute(gameContent.value.gameId, playerName.value, question.value);
 };
 
 watch(gameContent, (newGameContent) => {

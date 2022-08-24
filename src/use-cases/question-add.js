@@ -1,5 +1,5 @@
 import db from '../db';
-import calculateAiAnswer from '../server/calculate-ai-answer'
+import calculateAiAnswer from '../server/calculate-ai-answer';
 
 const QuestionAdd = {
   execute: async (gameId, playerName, question) => {

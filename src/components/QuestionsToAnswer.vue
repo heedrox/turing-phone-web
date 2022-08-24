@@ -1,0 +1,57 @@
+<script setup>
+import {
+  ref, toRefs, watch, computed,
+} from 'vue';
+import QuestionToAnswer from './QuestionToAnswer.vue';
+
+const STATES = {
+  NOT_LOADED: 'NOT_LOADED',
+  LOADED: 'LOADED',
+};
+
+const getState = (game) => {
+  if (!game || !game.gameId) return STATES.NOT_LOADED;
+  return STATES.LOADED;
+};
+
+const props = defineProps({
+  playerName: String,
+  numberOfPlayers: Number,
+  gameContent: Object,
+});
+const { playerName, numberOfPlayers, gameContent } = toRefs(props);
+
+const currentState = ref(STATES.NOT_LOADED);
+const numberOfQuestionsAnswered = computed(() => (
+  (gameContent && gameContent.value && gameContent.value.questions)
+    ? Object.keys(gameContent.value.questions).length
+    : 0
+));
+
+watch(gameContent, (newGameContent) => {
+  currentState.value = getState(newGameContent);
+});
+</script>
+<template>
+  <div class="q-ma-md">
+    <div v-if="currentState === STATES.LOADED">
+      <q-linear-progress size="30px"
+                         :value="numberOfQuestionsAnswered / numberOfPlayers"
+                         color="primary"
+                         class="q-mt-sm">
+        <div class="absolute-full flex flex-center">
+          <q-badge color="white"
+                   text-color="primary"
+                   :label="`Total questions sent:
+                   ${numberOfQuestionsAnswered } / ${ numberOfPlayers }`"/>
+        </div>
+      </q-linear-progress>
+      <QuestionToAnswer
+          v-for="question in gameContent.questions"
+          :question="question"
+          :playerName="playerName"
+          :key="playerName+question"
+      />
+    </div>
+  </div>
+</template>

@@ -1,5 +1,5 @@
 import {
-  doc, getDoc, setDoc, onSnapshot, updateDoc
+  doc, getDoc, setDoc, onSnapshot, updateDoc,
 } from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { db } from './firebase/index';
