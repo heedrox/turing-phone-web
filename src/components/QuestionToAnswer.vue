@@ -11,11 +11,12 @@ const { question } = toRefs(props);
 </script>
 <template>
   <q-card class="q-mt-md" flat bordered>
-    <q-card-section>
+    <q-card-section class="q-pa-md">
       <q-input v-model="text"
                :label="question.question"
                :dense="false"
-               :hint="`from ${prettyName(question.playerName)}`" />
+               :hint="`from ${prettyName(question.playerName)}
+               ${question.playerName === playerName?'(you)':''}`" />
       <q-btn
           label="SEND ANSWER"
           icon-right="send"

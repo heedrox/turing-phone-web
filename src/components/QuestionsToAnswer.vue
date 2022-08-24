@@ -22,7 +22,7 @@ const props = defineProps({
 const { playerName, numberOfPlayers, gameContent } = toRefs(props);
 
 const currentState = ref(STATES.NOT_LOADED);
-const numberOfQuestionsAnswered = computed(() => (
+const numberOfQuestionsSent = computed(() => (
   (gameContent && gameContent.value && gameContent.value.questions)
     ? Object.keys(gameContent.value.questions).length
     : 0
@@ -36,22 +36,25 @@ watch(gameContent, (newGameContent) => {
   <div class="q-ma-md">
     <div v-if="currentState === STATES.LOADED">
       <q-linear-progress size="30px"
-                         :value="numberOfQuestionsAnswered / numberOfPlayers"
+                         :value="numberOfQuestionsSent / numberOfPlayers"
                          color="primary"
                          class="q-mt-sm">
         <div class="absolute-full flex flex-center">
           <q-badge color="white"
                    text-color="primary"
                    :label="`Total questions sent:
-                   ${numberOfQuestionsAnswered } / ${ numberOfPlayers }`"/>
+                   ${numberOfQuestionsSent } / ${ numberOfPlayers }`"/>
         </div>
       </q-linear-progress>
-      <QuestionToAnswer
-          v-for="question in gameContent.questions"
-          :question="question"
-          :playerName="playerName"
-          :key="playerName+question"
-      />
+      <div v-if="numberOfQuestionsSent > 0">
+        <h6 class="q-mb-none q-mt-lg">Answer these questions:</h6>
+        <QuestionToAnswer
+            v-for="question in gameContent.questions"
+            :question="question"
+            :playerName="playerName"
+            :key="playerName+question"
+        />
+      </div>
     </div>
   </div>
 </template>
