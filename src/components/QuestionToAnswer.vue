@@ -36,15 +36,15 @@ watch(question, (questionModified) => {
                :dense="false"
                :hint="`from ${prettyName(question.playerName)}
                ${question.playerName === playerName?'(you)':''}`" />
+    </q-card-section>
+    <q-card-actions vertical>
       <q-btn
           label="SEND ANSWER"
           icon-right="send"
           color="primary"
           @click="sendAnswer"
-          glossy
-          outlined
-          class="q-mt-md"
+          flat
       />
-    </q-card-section>
+    </q-card-actions>
   </q-card>
 </template>
