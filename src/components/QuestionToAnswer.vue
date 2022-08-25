@@ -18,11 +18,14 @@ const sendAnswer = async () => {
 };
 
 watch(question, (questionModified) => {
-  const byPlayerName = (name) => (pa) => pa.fromPlayer && pa.playerName === name;
+  const byPlayerName = (name) => (pa) => (pa.fromPlayer && pa.playerName === name);
   const myAnswer = questionModified.possibleAnswers
-    ? questionModified.possibleAnswers.find(byPlayerName(playerName))
+    ? questionModified.possibleAnswers.find(byPlayerName(playerName.value))
     : null;
   isAnswered.value = !!myAnswer;
+  if (isAnswered.value) {
+    answer.value = myAnswer.answer;
+  }
 });
 </script>
 <template>

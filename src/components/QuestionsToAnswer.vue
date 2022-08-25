@@ -49,11 +49,11 @@ watch(gameContent, (newGameContent) => {
       <div v-if="numberOfQuestionsSent > 0">
         <h6 class="q-mb-none q-mt-lg">Answer these questions:</h6>
         <QuestionToAnswer
-            v-for="question in gameContent.questions"
+            v-for="(question, questionAuthor) in gameContent.questions"
             :question="question"
             :playerName="playerName"
             :gameId="gameContent.gameId"
-            :key="playerName+question"
+            :key="questionAuthor"
         />
       </div>
     </div>
