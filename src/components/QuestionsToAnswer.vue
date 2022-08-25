@@ -52,6 +52,7 @@ watch(gameContent, (newGameContent) => {
             v-for="question in gameContent.questions"
             :question="question"
             :playerName="playerName"
+            :gameId="gameContent.gameId"
             :key="playerName+question"
         />
       </div>

@@ -1,5 +1,5 @@
 import {
-  doc, getDoc, setDoc, onSnapshot, updateDoc,
+  doc, getDoc, setDoc, onSnapshot, updateDoc, arrayUnion,
 } from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { db } from './firebase/index';
@@ -38,9 +38,22 @@ const setQuestion = async (gameId, playerName, question, aiAnswer) => {
   });
 };
 
+const setAnswer = async (gameId, playerName, playerOfQuestion, playerAnswer) => {
+  const theDoc = await doc(db, `games/${gameId}`);
+  await updateDoc(theDoc, {
+    [`questions.${playerOfQuestion}.possibleAnswers`]: arrayUnion({
+      answer: playerAnswer,
+      fromAi: false,
+      fromPlayer: true,
+      playerName,
+    }),
+  });
+};
+
 export default {
   init,
   getGame,
   onGameChange,
   setQuestion,
+  setAnswer,
 };
