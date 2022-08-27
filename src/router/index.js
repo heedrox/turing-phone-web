@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import StartGame from '../pages/StartGame.vue';
+import StartGame from '../pages/GamePage.vue';
 import HomePage from '../pages/HomePage.vue';
 
 const routes = [
