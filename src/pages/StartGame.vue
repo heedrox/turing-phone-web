@@ -4,7 +4,7 @@ import QuestionsToAnswer from '../components/QuestionsToAnswer.vue';
 </script>
 
 <template>
-  <q-page >
+  <q-page style="max-width: 32rem; margin:auto;">
     <QuestionForm :playerName="playerName" :gameContent="gameContent" />
     <QuestionsToAnswer :playerName="playerName"
                        :numberOfPlayers="numberOfPlayers"
