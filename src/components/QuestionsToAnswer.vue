@@ -53,6 +53,7 @@ watch(gameContent, (newGameContent) => {
             :question="question"
             :playerName="playerName"
             :gameId="gameContent.gameId"
+            :number-of-players="numberOfPlayers"
             :key="questionAuthor"
         />
       </div>

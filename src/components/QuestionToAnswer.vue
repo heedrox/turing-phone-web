@@ -7,6 +7,7 @@ const props = defineProps({
   playerName: String,
   question: Object,
   gameId: String,
+  numberOfPlayers: Number,
 });
 const { playerName, question, gameId } = toRefs(props);
 
@@ -29,15 +30,19 @@ watch(question, (questionModified) => {
 });
 </script>
 <template>
-  <q-card class="q-mt-md" flat bordered>
+  <q-card class="q-mt-md" flat bordered :class="{'bg-green-1': isAnswered }">
     <q-card-section class="q-pa-md">
-      <q-input v-model="answer"
-               :label="question.question"
+      <p class="q-mb-none"><b>{{prettyName(question.playerName)}}:</b> {{question.question}}</p>
+      <p class="q-mt-md q-mb-none" v-if="isAnswered"><b>You: </b> {{answer}}</p>
+      <q-input
+          v-if="!isAnswered"
+          v-model="answer"
+               label="Your answer:"
                :dense="false"
-               :hint="`from ${prettyName(question.playerName)}
-               ${question.playerName === playerName?'(you)':''}`" />
+      />
+
     </q-card-section>
-    <q-card-actions vertical>
+    <q-card-actions vertical v-if="!isAnswered">
       <q-btn
           label="SEND ANSWER"
           icon-right="send"
@@ -46,5 +51,17 @@ watch(question, (questionModified) => {
           flat
       />
     </q-card-actions>
+
+    <q-linear-progress size="3px"
+                       :value="(question?.possibleAnswers?.length) / (numberOfPlayers + 1)"
+                       color="green"
+                       class="q-mt-sm">
+
+    </q-linear-progress>
+    <div class="absolute-bottom-right q-mb-xs q-mr-xs">
+      <q-badge color="white"
+               text-color="green"
+               :label="`${question?.possibleAnswers?.length} / ${numberOfPlayers + 1}`"/>
+    </div>
   </q-card>
 </template>
