@@ -35,7 +35,7 @@ const answerSelected = ({ question, answer }) => {
   selectedAnswers.value[question.playerName] = answer;
 };
 const allAnswered = computed(
-  () => (Object.keys(selectedAnswers.value).length === numberOfPlayers.value)
+  () => (Object.keys(selectedAnswers.value).length === numberOfPlayers.value),
 );
 
 const confirmAnswers = async () => {
