@@ -3,13 +3,13 @@ import { toRefs, computed } from 'vue';
 import SeeResultsWaiting from './SeeResultsWaiting.vue';
 import SeeResultsQuestion from './SeeResultsQuestion.vue';
 import SeeResultsMyScore from './SeeResultsMyScore.vue';
-import { getScoreForQuestion } from '../lib/score-calculator';
+import SeeRanking from './SeeRanking.vue';
 
 const STATES = {
   NOT_LOADED: 'NOT_LOADED',
   WAITING_FOR_PLAYERS: 'WAITING_FOR_PLAYERS',
   SEEING_RESULTS: 'SEEING_RESULTS',
-  SEEING_RANKING: 'SEING_RANKING'
+  SEEING_RANKING: 'SEING_RANKING',
 };
 
 const props = defineProps({
@@ -25,24 +25,30 @@ const numberOfResults = computed(() => Object.keys(gameContent.value?.results).l
 const currentState = computed(() => {
   if (!gameContent.value) return STATES.NOT_LOADED;
   if (numberOfResults.value !== numberOfPlayers.value) return STATES.WAITING_FOR_PLAYERS;
-  return STATES.SEEING_RESULTS;
+  if (!gameContent.value.scores) return STATES.SEEING_RESULTS;
+  if (!gameContent.value?.scores[playerName.value]) return STATES.SEEING_RESULTS;
+  return STATES.SEEING_RANKING;
 });
-
-const totalScore = computed(() => Object.values(gameContent.value.questions)
-  .map((q) => getScoreForQuestion(q, playerName.value, gameContent.value.results))
-  .reduce((partialSum, a) => partialSum + a, 0));
 </script>
 <template>
   <div>
     <SeeResultsWaiting v-if="currentState === STATES.WAITING_FOR_PLAYERS"
                        :number-of-players="numberOfPlayers" :number-of-results="numberOfResults" />
     <SeeResultsMyScore v-if="currentState === STATES.SEEING_RESULTS"
-                       :total-score="totalScore"></SeeResultsMyScore>
-    <SeeResultsQuestion v-for="(question, authorName) in gameContent.questions"
+                       :player-name="playerName"
+                       :game-content="gameContent"
+                       :number-of-players="numberOfPlayers"
+                       ></SeeResultsMyScore>
+    <SeeResultsQuestion v-for="(question, authorName) in
+    (currentState === STATES.SEEING_RESULTS ? gameContent.questions : [])"
                         :question="question"
-                        :playerName="playerName"
+                        :player-name="playerName"
                         :results="gameContent.results"
                         :key="authorName"></SeeResultsQuestion>
-    <SeeRanking></SeeRanking>
+    <SeeRanking v-if="currentState === STATES.SEEING_RANKING"
+                :player-name="playerName"
+                :game-content="gameContent"
+                :number-of-players="numberOfPlayers"
+    ></SeeRanking>
   </div>
 </template>

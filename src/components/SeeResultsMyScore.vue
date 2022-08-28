@@ -1,7 +1,23 @@
 <script setup>
-defineProps({
-  totalScore: Number,
+import { computed, toRefs } from 'vue';
+import db from '../db';
+import { getScoreForQuestion } from '../lib/score-calculator';
+
+const props = defineProps({
+  playerName: String,
+  numberOfPlayers: Number,
+  gameContent: Object,
 });
+
+const { gameContent, playerName } = toRefs(props);
+
+const totalScore = computed(() => Object.values(gameContent.value.questions)
+  .map((q) => getScoreForQuestion(q, playerName.value, gameContent.value.results))
+  .reduce((partialSum, a) => partialSum + a, 0));
+
+const seeRanking = async () => {
+  await db.setScore(gameContent.value.gameId, playerName.value, totalScore.value);
+};
 </script>
 <template>
   <div class="row q-pt-lg ">
@@ -15,7 +31,8 @@ defineProps({
           outline
           color="primary"
           icon-right="emoji_events"
-          label="SEE RANKING"></q-btn>
+          label="SEE RANKING"
+          @click="seeRanking"></q-btn>
     </div>
   </div>
 </template>

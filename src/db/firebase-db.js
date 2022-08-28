@@ -60,6 +60,13 @@ const setResults = async (gameId, playerName, selectedAnswers) => {
   });
 };
 
+const setScore = async (gameId, playerName, totalScore) => {
+  const theDoc = await doc(db, `games/${gameId}`);
+  await updateDoc(theDoc, {
+    [`scores.${playerName}`]: totalScore,
+  });
+};
+
 export default {
   init,
   getGame,
@@ -67,4 +74,5 @@ export default {
   setQuestion,
   setAnswer,
   setResults,
+  setScore,
 };
