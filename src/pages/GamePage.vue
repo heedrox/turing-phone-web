@@ -7,6 +7,9 @@ import SeeResults from '../components/SeeResults.vue';
 
 <template>
   <q-page style="max-width: 32rem; margin:auto;">
+    <div v-if="currentState === STATES.NO_CODE_READY">
+      <p>Code not available. Contact heedrox@gmail.com</p>
+    </div>
     <div v-if="currentState === STATES.NOT_LOADED">Loading...</div>
     <QuestionForm v-if="currentState === STATES.ADDING_ANSWERS"
                   :playerName="playerName"
@@ -34,6 +37,7 @@ const STATES = {
   ADDING_ANSWERS: 'ADDING_ANSWERS',
   READY_TO_PLAY: 'READY_TO_PLAY',
   SEEING_RESULTS: 'SEEING_RESULTS',
+  NO_CODE_READY: 'NO_CODE_READY',
 };
 
 export default {
@@ -44,7 +48,7 @@ export default {
         type: Object,
       },
       playerName: '',
-      numberOfPlayers: 0,
+      codeReady: true,
     };
   },
   computed: {
@@ -72,27 +76,28 @@ export default {
           && this.gameContent.results[this.playerName];
     },
     currentState() {
+      if (!this.codeReady) return STATES.NO_CODE_READY;
       if (!this.gameContent?.gameId) return STATES.NOT_LOADED;
       if (!this.gameReady) return STATES.ADDING_ANSWERS;
       if (!this.resultsSent) return STATES.READY_TO_PLAY;
       return STATES.SEEING_RESULTS;
     },
+    numberOfPlayers() {
+      return parseInt(
+        this.gameContent && this.gameContent.numberOfPlayers ? this.gameContent.numberOfPlayers : 0,
+        10,
+      );
+    },
   },
   async mounted() {
     const gameId = this.$route.params.gameId.toLowerCase();
     this.playerName = this.$route.params.playerName;
-    this.numberOfPlayers = parseInt(this.$route.params.numberOfPlayers, 10);
-    this.gameContent = await db.getGame(gameId, {
-      gameId,
-      numberOfPlayers: this.$route.params.numberOfPlayers,
-    });
+    this.gameContent = await db.getGame(gameId);
+    if (!this.gameContent.gameId) {
+      this.codeReady = false;
+      return;
+    }
     db.onGameChange(gameId, (gameContent) => {
-      if (!gameContent) {
-        db.getGame(gameId, {
-          gameId,
-          numberOfPlayers: this.$route.params.numberOfPlayers,
-        });
-      }
       this.gameContent = gameContent;
     });
   },

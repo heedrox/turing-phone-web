@@ -1,5 +1,5 @@
 import {
-  doc, getDoc, setDoc, onSnapshot, updateDoc, arrayUnion, deleteDoc,
+  doc, getDoc, setDoc, onSnapshot, updateDoc, arrayUnion,
 } from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { db } from './firebase/index';
@@ -67,9 +67,12 @@ const setScore = async (gameId, playerName, totalScore) => {
   });
 };
 
-const restart = async (gameId) => {
+const restart = async (gameId, numberOfPlayers) => {
   const theDoc = await doc(db, `games/${gameId}`);
-  await deleteDoc(theDoc);
+  await setDoc(theDoc, {
+    gameId,
+    numberOfPlayers,
+  });
 };
 export default {
   init,

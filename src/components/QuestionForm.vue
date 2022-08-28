@@ -39,7 +39,12 @@ const currentState = computed(() => (
 ));
 
 const sendQuestion = async () => {
-  await QuestionAdd.execute(gameContent.value.gameId, playerName.value, question.value);
+  await QuestionAdd.execute(
+    gameContent.value.gameId,
+    playerName.value,
+    question.value,
+    gameContent.value.lang,
+  );
 };
 
 watch(gameContent, (newGameContent) => {
