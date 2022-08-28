@@ -39,7 +39,7 @@ const allAnswered = computed(
 
 const confirmAnswers = async () => {
   currentState.value = STATES.SENDING;
-  await db.setResult(gameContent.value.gameId, playerName, selectedAnswers.value);
+  await db.setResults(gameContent.value.gameId, playerName.value, selectedAnswers.value);
   currentState.value = STATES.SENT;
 };
 </script>
@@ -58,6 +58,7 @@ const confirmAnswers = async () => {
       {{ question.question }}
     </QuestionToDetect>
     <q-btn color="primary"
+           v-if="currentState !== STATES.SENT"
            :disabled="!allAnswered"
            class="full-width q-mt-lg"
            label="CONFIRM ALL ANSWERS"

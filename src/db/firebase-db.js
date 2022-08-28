@@ -50,10 +50,21 @@ const setAnswer = async (gameId, playerName, playerOfQuestion, playerAnswer) => 
   });
 };
 
+const setResults = async (gameId, playerName, selectedAnswers) => {
+  const theDoc = await doc(db, `games/${gameId}`);
+  await updateDoc(theDoc, {
+    [`results.${playerName}`]: {
+      selectedAnswers,
+      playerName,
+    }
+  });
+}
+
 export default {
   init,
   getGame,
   onGameChange,
   setQuestion,
   setAnswer,
+  setResults
 };
