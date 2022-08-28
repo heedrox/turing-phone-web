@@ -56,9 +56,9 @@ const setResults = async (gameId, playerName, selectedAnswers) => {
     [`results.${playerName}`]: {
       selectedAnswers,
       playerName,
-    }
+    },
   });
-}
+};
 
 export default {
   init,
@@ -66,5 +66,5 @@ export default {
   onGameChange,
   setQuestion,
   setAnswer,
-  setResults
+  setResults,
 };

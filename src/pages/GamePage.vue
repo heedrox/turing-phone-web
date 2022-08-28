@@ -2,19 +2,31 @@
 import QuestionForm from '../components/QuestionForm.vue';
 import QuestionsToAnswer from '../components/QuestionsToAnswer.vue';
 import QuestionsDetection from '../components/QuestionsDetection.vue';
+import SeeResults from '../components/SeeResults.vue';
+
+const STATES = {
+  NOT_LOADED: 'NOT_LOADED',
+  ADDING_ANSWERS: 'ADDING_ANSWERS',
+  READY_TO_PLAY: 'READY_TO_PLAY',
+  SEEING_RESULTS: 'SEEING_RESULTS',
+};
 </script>
 
 <template>
   <q-page style="max-width: 32rem; margin:auto;">
-    <QuestionForm v-if="!gameReady" :playerName="playerName" :gameContent="gameContent"/>
-    <QuestionsToAnswer v-if="!gameReady"
+    <div v-if="currentState === STATES.NOT_LOADED">Loading...</div>
+    <QuestionForm v-if="currentState === STATES.ADDING_ANSWERS"
+                  playerName="playerName"
+                  :gameContent="gameContent"/>
+    <QuestionsToAnswer  v-if="currentState === STATES.ADDING_ANSWERS"
                        :playerName="playerName"
                        :numberOfPlayers="numberOfPlayers"
                        :gameContent="gameContent"/>
-    <QuestionsDetection v-if="gameReady"
+    <QuestionsDetection  v-if="currentState === STATES.READY_TO_PLAY"
                         :playerName="playerName"
                         :numberOfPlayers="numberOfPlayers"
                         :gameContent="gameContent"/>
+    <SeeResults v-if="currentState === STATES.SEEING_RESULTS"></SeeResults>
   </q-page>
 </template>
 
@@ -50,6 +62,17 @@ export default {
     },
     gameReady() {
       return this.allQuestionsAnswered && this.allQuestionsMade;
+    },
+    resultsSent() {
+      return this.gameContent
+          && this.gameContent.results
+          && this.gameContent.results[this.playerName];
+    },
+    currentState() {
+      if (!this.gameContent?.gameId) return this.STATES.NOT_LOADED;
+      if (!this.gameReady) return this.STATES.ADDING_ANSWERS;
+      if (!this.resultsSent) return this.STATES.READY_TO_PLAY;
+      return this.STATES.SEEING_RESULTS;
     },
   },
   async mounted() {

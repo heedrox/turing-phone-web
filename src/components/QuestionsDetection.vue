@@ -11,17 +11,19 @@ const STATES = {
   SENDING: 'SENDING',
 };
 
-const getState = (game) => {
-  if (!game || !game.gameId) return STATES.NOT_LOADED;
-  return STATES.LOADED;
-};
-
 const props = defineProps({
   playerName: String,
   numberOfPlayers: Number,
   gameContent: Object,
 });
+
 const { playerName, numberOfPlayers, gameContent } = toRefs(props);
+
+const getState = (game) => {
+  if (!game || !game.gameId) return STATES.NOT_LOADED;
+  if (game.results[playerName.value]) return STATES.SENT;
+  return STATES.LOADED;
+};
 
 const currentState = ref(STATES.NOT_LOADED);
 const selectedAnswers = ref({});
