@@ -9,7 +9,7 @@ import SeeResults from '../components/SeeResults.vue';
   <q-page style="max-width: 32rem; margin:auto;">
     <div v-if="currentState === STATES.NOT_LOADED">Loading...</div>
     <QuestionForm v-if="currentState === STATES.ADDING_ANSWERS"
-                  playerName="playerName"
+                  :playerName="playerName"
                   :gameContent="gameContent"/>
     <QuestionsToAnswer  v-if="currentState === STATES.ADDING_ANSWERS"
                        :playerName="playerName"

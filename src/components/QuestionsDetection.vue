@@ -21,7 +21,7 @@ const { playerName, numberOfPlayers, gameContent } = toRefs(props);
 
 const getState = (game) => {
   if (!game || !game.gameId) return STATES.NOT_LOADED;
-  if (game.results[playerName.value]) return STATES.SENT;
+  if (game.results && game.results[playerName.value]) return STATES.SENT;
   return STATES.LOADED;
 };
 

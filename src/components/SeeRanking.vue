@@ -2,6 +2,7 @@
 import { computed, toRefs } from 'vue';
 import prettyName from '../lib/pretty-name';
 import SeeRankingWaiting from './SeeRankingWaiting.vue';
+import SeeRankingRestart from './SeeRankingRestart.vue';
 
 const STATES = {
   WAITING_FOR_PLAYERS: 'WAITING_FOR_PLAYERS',
@@ -54,4 +55,6 @@ const ranking = computed(() => {
       </tbody>
     </q-markup-table>
   </q-card>
+  <SeeRankingRestart v-if="currentState === STATES.SEEING_RANKING"
+                     :game-content="gameContent"></SeeRankingRestart>
 </template>

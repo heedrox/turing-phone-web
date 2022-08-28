@@ -1,5 +1,5 @@
 import {
-  doc, getDoc, setDoc, onSnapshot, updateDoc, arrayUnion,
+  doc, getDoc, setDoc, onSnapshot, updateDoc, arrayUnion, deleteDoc
 } from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { db } from './firebase/index';
@@ -16,7 +16,7 @@ const getGame = async (gameId, defaultDataIfNotExists = {}) => {
   if (!docSnap.exists()) {
     await setDoc(theDoc, defaultDataIfNotExists);
   }
-  return docSnap.exists() ? docSnap.data() : null;
+  return docSnap.exists() ? docSnap.data() : defaultDataIfNotExists;
 };
 
 const onGameChange = (gameId, callback) => {
@@ -67,6 +67,10 @@ const setScore = async (gameId, playerName, totalScore) => {
   });
 };
 
+const restart = async (gameId) => {
+  const theDoc = await doc(db, `games/${gameId}`);
+  await deleteDoc(theDoc);
+}
 export default {
   init,
   getGame,
@@ -75,4 +79,5 @@ export default {
   setAnswer,
   setResults,
   setScore,
+  restart
 };
