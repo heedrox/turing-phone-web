@@ -24,7 +24,6 @@ const currentState = computed(() => {
   if (numberOfResults.value !== numberOfPlayers.value) return STATES.WAITING_FOR_PLAYERS;
   return STATES.SEEING_RESULTS;
 });
-
 </script>
 <template>
   <div>
@@ -33,6 +32,7 @@ const currentState = computed(() => {
     <SeeResultsQuestion v-for="(question, authorName) in gameContent.questions"
                         :question="question"
                         :playerName="playerName"
+                        :results="gameContent.results"
                         :key="authorName"></SeeResultsQuestion>
   </div>
 </template>
