@@ -2,6 +2,7 @@
 import { computed, toRefs } from 'vue';
 import prettyName from '../lib/pretty-name';
 import shuffle from '../lib/shuffle';
+import { getScoreForQuestion, numberOfPlayersWhoSelectedAnswerFrom } from '../lib/score-calculator';
 
 const props = defineProps({
   playerName: String,
@@ -43,17 +44,13 @@ const getClass = (answer) => {
   return 'bg-red-2';
 };
 
-const numberOfPlayersWhoSelectedMyAnswer = () => {
-  const createdAnswerOfPlayer = question.value.possibleAnswers
-    .find((pa) => pa.fromPlayer && pa.playerName === playerName.value);
-  return playersWhoAnswered(createdAnswerOfPlayer).filter((p) => p !== playerName.value).length;
-};
+const numberOfPlayersWhoSelectedMyAnswer = () => (
+  numberOfPlayersWhoSelectedAnswerFrom(question.value, playerName.value, results.value)
+);
 
-const scoreOfCurrentQuestion = computed(() => {
-  const pointsForSelectedAnswer = selectedAnswer.value.fromAi ? 20 : -20;
-  const pointsForOther = numberOfPlayersWhoSelectedMyAnswer() * 5;
-  return pointsForSelectedAnswer + pointsForOther;
-});
+const scoreOfCurrentQuestion = computed(() => (
+  getScoreForQuestion(question.value, playerName.value, results.value)
+));
 
 </script>
 <template>
@@ -91,9 +88,9 @@ const scoreOfCurrentQuestion = computed(() => {
     <q-card-section class="bg-grey-2 q-pt-sm q-pb-sm text-caption">
       <p class="q-mb-none" v-if="selectedAnswer.fromAi">Points for correct answer: +20 pts.</p>
       <p class="q-mb-none" v-if="selectedAnswer.fromPlayer">Points for wrong answer: -20 pts.</p>
-      <p class="q-ma-none">Players that chose your answer:
+      <p class="q-ma-none">Points from players that chose your answer:
         +{{numberOfPlayersWhoSelectedMyAnswer() * 5}} pts
-        <span class="text-grey-8">({{numberOfPlayersWhoSelectedMyAnswer()}} player)</span>
+        <span class="text-grey-8">({{numberOfPlayersWhoSelectedMyAnswer()}} players)</span>
         </p>
       <p class="absolute-right q-ma-md text-bold" style="font-size:1rem">
         <span v-if="scoreOfCurrentQuestion>0"> + </span>
