@@ -3,13 +3,6 @@ import QuestionForm from '../components/QuestionForm.vue';
 import QuestionsToAnswer from '../components/QuestionsToAnswer.vue';
 import QuestionsDetection from '../components/QuestionsDetection.vue';
 import SeeResults from '../components/SeeResults.vue';
-
-const STATES = {
-  NOT_LOADED: 'NOT_LOADED',
-  ADDING_ANSWERS: 'ADDING_ANSWERS',
-  READY_TO_PLAY: 'READY_TO_PLAY',
-  SEEING_RESULTS: 'SEEING_RESULTS',
-};
 </script>
 
 <template>
@@ -26,12 +19,22 @@ const STATES = {
                         :playerName="playerName"
                         :numberOfPlayers="numberOfPlayers"
                         :gameContent="gameContent"/>
-    <SeeResults v-if="currentState === STATES.SEEING_RESULTS"></SeeResults>
+    <SeeResults v-if="currentState === STATES.SEEING_RESULTS"
+                :playerName="playerName"
+                :numberOfPlayers="numberOfPlayers"
+                :gameContent="gameContent"></SeeResults>
   </q-page>
 </template>
 
 <script>
 import db from '../db';
+
+const STATES = {
+  NOT_LOADED: 'NOT_LOADED',
+  ADDING_ANSWERS: 'ADDING_ANSWERS',
+  READY_TO_PLAY: 'READY_TO_PLAY',
+  SEEING_RESULTS: 'SEEING_RESULTS',
+};
 
 export default {
   name: 'GamePage',
@@ -69,10 +72,10 @@ export default {
           && this.gameContent.results[this.playerName];
     },
     currentState() {
-      if (!this.gameContent?.gameId) return this.STATES.NOT_LOADED;
-      if (!this.gameReady) return this.STATES.ADDING_ANSWERS;
-      if (!this.resultsSent) return this.STATES.READY_TO_PLAY;
-      return this.STATES.SEEING_RESULTS;
+      if (!this.gameContent?.gameId) return STATES.NOT_LOADED;
+      if (!this.gameReady) return STATES.ADDING_ANSWERS;
+      if (!this.resultsSent) return STATES.READY_TO_PLAY;
+      return STATES.SEEING_RESULTS;
     },
   },
   async mounted() {
