@@ -1,14 +1,20 @@
 <script setup>
 import QuestionForm from '../components/QuestionForm.vue';
 import QuestionsToAnswer from '../components/QuestionsToAnswer.vue';
+import QuestionsDetection from '../components/QuestionsDetection.vue';
 </script>
 
 <template>
   <q-page style="max-width: 32rem; margin:auto;">
-    <QuestionForm :playerName="playerName" :gameContent="gameContent" />
-    <QuestionsToAnswer :playerName="playerName"
+    <QuestionForm v-if="!gameReady" :playerName="playerName" :gameContent="gameContent"/>
+    <QuestionsToAnswer v-if="!gameReady"
+                       :playerName="playerName"
                        :numberOfPlayers="numberOfPlayers"
-                       :gameContent="gameContent" />
+                       :gameContent="gameContent"/>
+    <QuestionsDetection v-if="gameReady"
+                        :playerName="playerName"
+                        :numberOfPlayers="numberOfPlayers"
+                        :gameContent="gameContent"/>
   </q-page>
 </template>
 
@@ -16,7 +22,7 @@ import QuestionsToAnswer from '../components/QuestionsToAnswer.vue';
 import db from '../db';
 
 export default {
-  name: 'StartGame',
+  name: 'GamePage',
   data() {
     return {
       gameContent: {
@@ -25,6 +31,26 @@ export default {
       playerName: '',
       numberOfPlayers: 0,
     };
+  },
+  computed: {
+    numbersOfQuestionsMade() {
+      return ((this.gameContent && this.gameContent.questions)
+        ? Object.keys(this.gameContent?.questions).length
+        : 0);
+    },
+    allQuestionsMade() {
+      return this.numbersOfQuestionsMade === this.numberOfPlayers;
+    },
+    allQuestionsAnswered() {
+      const possibleQuestions = this.gameContent?.questions ? this.gameContent.questions : [];
+      const questions = Object.values(possibleQuestions);
+      const byComplete = (q) => q.possibleAnswers.length === (this.numberOfPlayers + 1);
+      const numQuestionsComplete = questions.filter(byComplete).length;
+      return numQuestionsComplete === this.numberOfPlayers;
+    },
+    gameReady() {
+      return this.allQuestionsAnswered && this.allQuestionsMade;
+    },
   },
   async mounted() {
     const gameId = this.$route.params.gameId.toLowerCase();
