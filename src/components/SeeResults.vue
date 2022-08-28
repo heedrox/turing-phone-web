@@ -9,6 +9,7 @@ const STATES = {
   NOT_LOADED: 'NOT_LOADED',
   WAITING_FOR_PLAYERS: 'WAITING_FOR_PLAYERS',
   SEEING_RESULTS: 'SEEING_RESULTS',
+  SEEING_RANKING: 'SEING_RANKING'
 };
 
 const props = defineProps({
@@ -37,15 +38,11 @@ const totalScore = computed(() => Object.values(gameContent.value.questions)
                        :number-of-players="numberOfPlayers" :number-of-results="numberOfResults" />
     <SeeResultsMyScore v-if="currentState === STATES.SEEING_RESULTS"
                        :total-score="totalScore"></SeeResultsMyScore>
-    <div>
-      <q-btn class="text-center" v-if="currentState === STATES.SEEING_RESULTS"
-             icon-right="emoji_events"
-      label="SEE RANKING"></q-btn>
-    </div>
     <SeeResultsQuestion v-for="(question, authorName) in gameContent.questions"
                         :question="question"
                         :playerName="playerName"
                         :results="gameContent.results"
                         :key="authorName"></SeeResultsQuestion>
+    <SeeRanking></SeeRanking>
   </div>
 </template>
