@@ -42,6 +42,19 @@ const getClass = (answer) => {
   if (answer.fromAi) return 'bg-green-1';
   return 'bg-red-2';
 };
+
+const numberOfPlayersWhoSelectedMyAnswer = () => {
+  const createdAnswerOfPlayer = question.value.possibleAnswers
+    .find((pa) => pa.fromPlayer && pa.playerName === playerName.value);
+  return playersWhoAnswered(createdAnswerOfPlayer).filter((p) => p !== playerName.value).length;
+};
+
+const scoreOfCurrentQuestion = computed(() => {
+  const pointsForSelectedAnswer = selectedAnswer.value.fromAi ? 20 : -20;
+  const pointsForOther = numberOfPlayersWhoSelectedMyAnswer() * 5;
+  return pointsForSelectedAnswer + pointsForOther;
+});
+
 </script>
 <template>
   <q-card class="q-mt-md" flat bordered>
@@ -76,9 +89,16 @@ const getClass = (answer) => {
     </q-card-section>
     <q-separator></q-separator>
     <q-card-section class="bg-grey-2 q-pt-sm q-pb-sm text-caption">
-      <span v-if="selectedAnswer.fromAi">Correct answer +10</span>
-      <span v-if="selectedAnswer.fromPlayer">Wrong answer -10</span>
-
+      <p class="q-mb-none" v-if="selectedAnswer.fromAi">Points for correct answer: +20 pts.</p>
+      <p class="q-mb-none" v-if="selectedAnswer.fromPlayer">Points for wrong answer: -20 pts.</p>
+      <p class="q-ma-none">Players that chose your answer:
+        +{{numberOfPlayersWhoSelectedMyAnswer() * 5}} pts
+        <span class="text-grey-8">({{numberOfPlayersWhoSelectedMyAnswer()}} player)</span>
+        </p>
+      <p class="absolute-right q-ma-md text-bold" style="font-size:1rem">
+        <span v-if="scoreOfCurrentQuestion>0"> + </span>
+        <span v-if="scoreOfCurrentQuestion<0"> - </span>
+        {{Math.abs(scoreOfCurrentQuestion)}}</p>
     </q-card-section>
   </q-card>
 </template>
