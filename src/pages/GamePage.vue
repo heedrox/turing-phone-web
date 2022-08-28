@@ -1,8 +1,8 @@
 <script setup>
-import QuestionForm from '../components/QuestionForm.vue';
-import QuestionsToAnswer from '../components/QuestionsToAnswer.vue';
-import QuestionsDetection from '../components/QuestionsDetection.vue';
-import SeeResults from '../components/SeeResults.vue';
+import QuestionForm from '../components/QuestionForm.vue'
+import QuestionsToAnswer from '../components/QuestionsToAnswer.vue'
+import QuestionsDetection from '../components/QuestionsDetection.vue'
+import SeeResults from '../components/SeeResults.vue'
 </script>
 
 <template>
@@ -11,11 +11,11 @@ import SeeResults from '../components/SeeResults.vue';
     <QuestionForm v-if="currentState === STATES.ADDING_ANSWERS"
                   :playerName="playerName"
                   :gameContent="gameContent"/>
-    <QuestionsToAnswer  v-if="currentState === STATES.ADDING_ANSWERS"
+    <QuestionsToAnswer v-if="currentState === STATES.ADDING_ANSWERS"
                        :playerName="playerName"
                        :numberOfPlayers="numberOfPlayers"
                        :gameContent="gameContent"/>
-    <QuestionsDetection  v-if="currentState === STATES.READY_TO_PLAY"
+    <QuestionsDetection v-if="currentState === STATES.READY_TO_PLAY"
                         :playerName="playerName"
                         :numberOfPlayers="numberOfPlayers"
                         :gameContent="gameContent"/>
@@ -27,67 +27,74 @@ import SeeResults from '../components/SeeResults.vue';
 </template>
 
 <script>
-import db from '../db';
+import db from '../db'
 
 const STATES = {
   NOT_LOADED: 'NOT_LOADED',
   ADDING_ANSWERS: 'ADDING_ANSWERS',
   READY_TO_PLAY: 'READY_TO_PLAY',
   SEEING_RESULTS: 'SEEING_RESULTS',
-};
+}
 
 export default {
   name: 'GamePage',
-  data() {
+  data () {
     return {
       gameContent: {
         type: Object,
       },
       playerName: '',
       numberOfPlayers: 0,
-    };
+    }
   },
   computed: {
-    numbersOfQuestionsMade() {
+    numbersOfQuestionsMade () {
       return ((this.gameContent && this.gameContent.questions)
-        ? Object.keys(this.gameContent?.questions).length
-        : 0);
+          ? Object.keys(this.gameContent?.questions).length
+          : 0)
     },
-    allQuestionsMade() {
-      return this.numbersOfQuestionsMade === this.numberOfPlayers;
+    allQuestionsMade () {
+      return this.numbersOfQuestionsMade === this.numberOfPlayers
     },
-    allQuestionsAnswered() {
-      const possibleQuestions = this.gameContent?.questions ? this.gameContent.questions : [];
-      const questions = Object.values(possibleQuestions);
-      const byComplete = (q) => q.possibleAnswers.length === (this.numberOfPlayers + 1);
-      const numQuestionsComplete = questions.filter(byComplete).length;
-      return numQuestionsComplete === this.numberOfPlayers;
+    allQuestionsAnswered () {
+      const possibleQuestions = this.gameContent?.questions ? this.gameContent.questions : []
+      const questions = Object.values(possibleQuestions)
+      const byComplete = (q) => q.possibleAnswers.length === (this.numberOfPlayers + 1)
+      const numQuestionsComplete = questions.filter(byComplete).length
+      return numQuestionsComplete === this.numberOfPlayers
     },
-    gameReady() {
-      return this.allQuestionsAnswered && this.allQuestionsMade;
+    gameReady () {
+      return this.allQuestionsAnswered && this.allQuestionsMade
     },
-    resultsSent() {
+    resultsSent () {
       return this.gameContent
           && this.gameContent.results
-          && this.gameContent.results[this.playerName];
+          && this.gameContent.results[this.playerName]
     },
-    currentState() {
-      if (!this.gameContent?.gameId) return STATES.NOT_LOADED;
-      if (!this.gameReady) return STATES.ADDING_ANSWERS;
-      if (!this.resultsSent) return STATES.READY_TO_PLAY;
-      return STATES.SEEING_RESULTS;
+    currentState () {
+      if (!this.gameContent?.gameId) return STATES.NOT_LOADED
+      if (!this.gameReady) return STATES.ADDING_ANSWERS
+      if (!this.resultsSent) return STATES.READY_TO_PLAY
+      return STATES.SEEING_RESULTS
     },
   },
-  async mounted() {
-    const gameId = this.$route.params.gameId.toLowerCase();
-    this.playerName = this.$route.params.playerName;
-    this.numberOfPlayers = parseInt(this.$route.params.numberOfPlayers, 10);
+  async mounted () {
+    const gameId = this.$route.params.gameId.toLowerCase()
+    this.playerName = this.$route.params.playerName
+    this.numberOfPlayers = parseInt(this.$route.params.numberOfPlayers, 10)
     this.gameContent = await db.getGame(gameId, {
       gameId,
       numberOfPlayers: this.$route.params.numberOfPlayers,
     });
     db.onGameChange(gameId, (gameContent) => {
-      this.gameContent = gameContent;
+      console.log(gameContent);
+      if (!gameContent) {
+        db.getGame(gameId, {
+          gameId,
+          numberOfPlayers: this.$route.params.numberOfPlayers,
+        });
+      }
+      this.gameContent = gameContent
     });
   },
 };

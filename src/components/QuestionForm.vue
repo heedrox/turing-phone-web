@@ -34,7 +34,9 @@ const { playerName, gameContent } = toRefs(props);
 const capitalizedName = computed(() => prettyName(playerName.value));
 
 const question = ref('');
-const currentState = ref(STATES.NOT_LOADED);
+const currentState = computed(() => (
+  getState(gameContent.value, playerName.value)
+));
 
 const sendQuestion = async () => {
   await QuestionAdd.execute(gameContent.value.gameId, playerName.value, question.value);
@@ -44,7 +46,6 @@ watch(gameContent, (newGameContent) => {
   if (playerMadeQuestion(newGameContent, playerName.value)) {
     question.value = newGameContent.questions[playerName.value].question;
   }
-  currentState.value = getState(newGameContent, playerName.value);
 });
 </script>
 <template>

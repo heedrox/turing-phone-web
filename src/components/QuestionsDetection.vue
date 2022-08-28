@@ -36,7 +36,6 @@ const answerSelected = ({ question, answer }) => {
 };
 const allAnswered = computed(
   () => (Object.keys(selectedAnswers.value).length === numberOfPlayers.value)
-               && (currentState.value === STATES.LOADED),
 );
 
 const confirmAnswers = async () => {

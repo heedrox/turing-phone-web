@@ -26,7 +26,7 @@ const currentState = computed(() => {
   if (!gameContent.value) return STATES.NOT_LOADED;
   if (numberOfResults.value !== numberOfPlayers.value) return STATES.WAITING_FOR_PLAYERS;
   if (!gameContent.value.scores) return STATES.SEEING_RESULTS;
-  if (!gameContent.value?.scores[playerName.value]) return STATES.SEEING_RESULTS;
+  if (typeof gameContent.value?.scores[playerName.value] === 'undefined') return STATES.SEEING_RESULTS;
   return STATES.SEEING_RANKING;
 });
 </script>

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, toRefs } from 'vue';
-import db from '../db/index'
+import db from '../db/index';
 
 const props = defineProps({
   gameContent: Object,
