@@ -4,7 +4,7 @@ import HomePage from '../pages/HomePage.vue';
 
 const routes = [
   { path: '/', component: HomePage },
-  { path: '/game/:gameId/:numberOfPlayers/player/:playerNumber/:playerName/start', component: StartGame },
+  { path: '/game/:gameId/:playerName/start', component: StartGame },
 ];
 
 const history = createWebHistory();
