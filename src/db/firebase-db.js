@@ -67,11 +67,12 @@ const setScore = async (gameId, playerName, totalScore) => {
   });
 };
 
-const restart = async (gameId, numberOfPlayers) => {
+const restart = async (gameId, numberOfPlayers, lang) => {
   const theDoc = await doc(db, `games/${gameId}`);
   await setDoc(theDoc, {
     gameId,
     numberOfPlayers,
+    lang
   });
 };
 export default {

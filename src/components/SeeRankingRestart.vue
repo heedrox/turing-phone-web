@@ -11,7 +11,7 @@ const { gameContent } = toRefs(props);
 const showDialog = ref(false);
 
 const restart = () => {
-  db.restart(gameContent.value.gameId, gameContent.value.numberOfPlayers);
+  db.restart(gameContent.value.gameId, gameContent.value.numberOfPlayers, gameContent.value.lang);
 };
 
 </script>
