@@ -3,7 +3,7 @@ import {
   ref, toRefs, watch, computed,
 } from 'vue';
 import QuestionToDetect from './QuestionToDetect.vue';
-import db from '../db/index';
+import db from '../../db/index';
 
 const STATES = {
   NOT_LOADED: 'NOT_LOADED',

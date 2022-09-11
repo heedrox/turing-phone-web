@@ -2,8 +2,8 @@
 import {
   toRefs, ref, computed, defineEmits,
 } from 'vue';
-import prettyName from '../lib/pretty-name';
-import shuffle from '../lib/shuffle';
+import prettyName from '../../lib/pretty-name';
+import hashString from '../../lib/hash-string';
 
 const emit = defineEmits(['answerSelected']);
 
@@ -22,8 +22,11 @@ const sendAnswer = async (answer) => {
   selectedAnswer.value = answer;
 };
 
-const possibleAnswersRandom = computed(() => (question.value
-  ? shuffle(question.value.possibleAnswers)
+const byPredefinedOrder = (a, b) => hashString(a.answer) - hashString(b.answer);
+const clone = (o) => JSON.parse(JSON.stringify(o));
+
+const possibleAnswersSorted = computed(() => (question.value
+  ? clone(question.value.possibleAnswers).sort(byPredefinedOrder)
   : []));
 
 </script>
@@ -35,7 +38,7 @@ const possibleAnswersRandom = computed(() => (question.value
     <q-separator />
     <q-card-section class="q-pa-none">
       <q-list separator>
-        <q-item clickable v-for="answer in possibleAnswersRandom" @click="sendAnswer(answer)"
+        <q-item clickable v-for="answer in possibleAnswersSorted" @click="sendAnswer(answer)"
         :key="answer" :class="{'bg-green-1': (selectedAnswer === answer)}">
           <q-item-section><div>- {{answer.answer}}
             <q-badge class="q-ma-xs"
