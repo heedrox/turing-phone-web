@@ -1,8 +1,11 @@
 <script setup>
 import { computed, toRefs } from 'vue';
 import prettyName from '../lib/pretty-name';
-import shuffle from '../lib/shuffle';
 import { getScoreForQuestion, numberOfPlayersWhoSelectedAnswerFrom } from '../lib/score-calculator';
+import hashString from '../lib/hash-string'
+import clone from '../lib/clone';
+
+const isSameAnswer = (a, b) => a.answer === b.answer && a.playerName === b.playerName;
 
 const props = defineProps({
   playerName: String,
@@ -19,17 +22,10 @@ const selectedAnswer = computed(() => {
   return results.value[playerName.value].selectedAnswers[author];
 });
 
-const possibleAnswersRandom = computed(() => (question.value
-  ? shuffle(question.value.possibleAnswers)
-  : []));
-
-const isSelected = (answer) => (selectedAnswer.value.answer === answer.answer
-    && selectedAnswer.value.playerName === answer.playerName);
+const isSelected = (answer) => isSameAnswer(selectedAnswer.value, answer);
 
 const answerOfPlayerForQuestion = (player, qtn) => results.value[player]
   .selectedAnswers[qtn.playerName];
-
-const isSameAnswer = (a, b) => a.answer === b.answer && a.playerName === b.playerName;
 
 const playersWhoAnswered = (answer) => allPlayers.value.map((player) => ({
   player,
@@ -52,6 +48,12 @@ const scoreOfCurrentQuestion = computed(() => (
   getScoreForQuestion(question.value, playerName.value, results.value)
 ));
 
+const byPredefinedOrder = (a, b) => hashString(a.answer) - hashString(b.answer);
+
+const possibleAnswersSorted = computed(() => (question.value
+    ? clone(question.value.possibleAnswers).sort(byPredefinedOrder)
+    : []));
+
 </script>
 <template>
   <q-card class="q-mt-md" flat bordered>
@@ -61,7 +63,7 @@ const scoreOfCurrentQuestion = computed(() => (
     <q-separator/>
     <q-card-section class="q-pa-none">
       <q-list separator>
-        <q-item v-for="answer in possibleAnswersRandom"
+        <q-item v-for="answer in possibleAnswersSorted"
                 :key="answer" :class="getClass(answer)">
           <q-item-section>
             <div>

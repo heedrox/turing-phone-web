@@ -15,6 +15,7 @@ const answer = ref('');
 const isAnswered = ref(false);
 
 const sendAnswer = async () => {
+  if (!answer.value) return;
   await db.setAnswer(gameId.value, playerName.value, question.value.playerName, answer.value);
 };
 
