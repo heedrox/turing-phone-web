@@ -21,6 +21,11 @@ const props = defineProps({
 const { playerName, numberOfPlayers, gameContent } = toRefs(props);
 
 const numberOfResults = computed(() => Object.keys(gameContent.value?.results).length);
+const sortedQuestions = computed(() => {
+  const byTimestamp = (a, b) => (a.created ? a.created.toMillis() : 0)
+      - (b.created ? b.created.toMillis() : 0);
+  return Object.values(gameContent.value.questions).sort(byTimestamp);
+});
 
 const currentState = computed(() => {
   if (!gameContent.value) return STATES.NOT_LOADED;
@@ -39,12 +44,12 @@ const currentState = computed(() => {
                        :game-content="gameContent"
                        :number-of-players="numberOfPlayers"
                        ></SeeResultsMyScore>
-    <SeeResultsQuestion v-for="(question, authorName) in
-    (currentState === STATES.SEEING_RESULTS ? gameContent.questions : [])"
+    <SeeResultsQuestion v-for="question in
+    (currentState === STATES.SEEING_RESULTS ? sortedQuestions : [])"
                         :question="question"
                         :player-name="playerName"
                         :results="gameContent.results"
-                        :key="authorName"></SeeResultsQuestion>
+                        :key="question.playerName"></SeeResultsQuestion>
     <SeeRanking v-if="currentState === STATES.SEEING_RANKING"
                 :player-name="playerName"
                 :game-content="gameContent"

@@ -2,7 +2,7 @@
 import { computed, toRefs } from 'vue';
 import prettyName from '../lib/pretty-name';
 import { getScoreForQuestion, numberOfPlayersWhoSelectedAnswerFrom } from '../lib/score-calculator';
-import hashString from '../lib/hash-string'
+import hashString from '../lib/hash-string';
 import clone from '../lib/clone';
 
 const isSameAnswer = (a, b) => a.answer === b.answer && a.playerName === b.playerName;
@@ -51,8 +51,8 @@ const scoreOfCurrentQuestion = computed(() => (
 const byPredefinedOrder = (a, b) => hashString(a.answer) - hashString(b.answer);
 
 const possibleAnswersSorted = computed(() => (question.value
-    ? clone(question.value.possibleAnswers).sort(byPredefinedOrder)
-    : []));
+  ? clone(question.value.possibleAnswers).sort(byPredefinedOrder)
+  : []));
 
 </script>
 <template>
