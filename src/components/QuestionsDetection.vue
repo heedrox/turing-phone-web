@@ -38,6 +38,12 @@ const allAnswered = computed(
   () => (Object.keys(selectedAnswers.value).length === numberOfPlayers.value),
 );
 
+const sortedQuestions = computed(() => {
+  const byTimestamp = (a, b) => (a.created ? a.created.toMillis() : 0)
+      - (b.created ? b.created.toMillis() : 0);
+  return Object.values(gameContent.value.questions).sort(byTimestamp);
+});
+
 const confirmAnswers = async () => {
   currentState.value = STATES.SENDING;
   await db.setResults(gameContent.value.gameId, playerName.value, selectedAnswers.value);
@@ -49,13 +55,13 @@ const confirmAnswers = async () => {
 
     <h6 class="q-mb-none q-mt-lg">Who's the <q-icon name="smart_toy"/> AI spy?</h6>
     <QuestionToDetect
-        v-for="(question, player) in (gameContent.questions)"
+        v-for="question in sortedQuestions"
         :question="question"
         :playerName="playerName"
         :gameId="gameContent.gameId"
         :number-of-players="numberOfPlayers"
         @answerSelected="answerSelected"
-        :key="player">
+        :key="question.playerName">
       {{ question.question }}
     </QuestionToDetect>
     <q-btn color="primary"
