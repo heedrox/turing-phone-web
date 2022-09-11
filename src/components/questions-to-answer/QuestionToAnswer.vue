@@ -1,7 +1,7 @@
 <script setup>
 import { toRefs, ref, watch } from 'vue';
-import prettyName from '../lib/pretty-name';
-import db from '../db/index';
+import prettyName from '../../lib/pretty-name';
+import db from '../../db/index';
 
 const props = defineProps({
   playerName: String,

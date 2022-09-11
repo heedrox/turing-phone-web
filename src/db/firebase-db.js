@@ -1,5 +1,5 @@
 import {
-  doc, getDoc, setDoc, onSnapshot, updateDoc, arrayUnion,
+  doc, getDoc, setDoc, onSnapshot, updateDoc, arrayUnion, serverTimestamp,
 } from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { db } from './firebase/index';
@@ -31,6 +31,7 @@ const setQuestion = async (gameId, playerName, question, aiAnswer) => {
     [`questions.${playerName}`]: {
       playerName,
       question,
+      created: serverTimestamp(),
       possibleAnswers: [
         { fromAi: true, fromPlayer: false, answer: aiAnswer },
       ],

@@ -28,6 +28,12 @@ const numberOfQuestionsSent = computed(() => (
     : 0
 ));
 
+const sortedQuestions = computed(() => {
+  const byTimestamp = (a, b) => (a.created ? a.created.toMillis() : 0)
+      - (b.created ? b.created.toMillis() : 0);
+  return Object.values(gameContent.value.questions).sort(byTimestamp);
+});
+
 watch(gameContent, (newGameContent) => {
   currentState.value = getState(newGameContent);
 });
@@ -49,12 +55,12 @@ watch(gameContent, (newGameContent) => {
       <div v-if="numberOfQuestionsSent > 0">
         <h6 class="q-mb-none q-mt-lg">Answer these questions:</h6>
         <QuestionToAnswer
-            v-for="(question, questionAuthor) in gameContent.questions"
+            v-for="question in sortedQuestions"
             :question="question"
             :playerName="playerName"
             :gameId="gameContent.gameId"
             :number-of-players="numberOfPlayers"
-            :key="questionAuthor"
+            :key="question.playerName"
         />
       </div>
     </div>
