@@ -29,6 +29,13 @@ const possibleAnswersSorted = computed(() => (question.value
   ? clone(question.value.possibleAnswers).sort(byPredefinedOrder)
   : []));
 
+const isSameAnswer = (a, b) => {
+  if (!a || !b) return false;
+  if (a.fromAi && b.fromAi) return true;
+  if ((a.fromAi && !b.fromAi) || (!a.fromAi && b.fromAi)) return false;
+  return (a.playerName === b.playerName);
+};
+
 </script>
 <template>
   <q-card class="q-mt-md" flat bordered>
@@ -39,10 +46,10 @@ const possibleAnswersSorted = computed(() => (question.value
     <q-card-section class="q-pa-none">
       <q-list separator>
         <q-item clickable v-for="answer in possibleAnswersSorted" @click="sendAnswer(answer)"
-        :key="answer" :class="{'bg-green-1': (selectedAnswer === answer)}">
+        :key="answer" :class="{'bg-green-1': isSameAnswer(selectedAnswer, answer)}">
           <q-item-section><div>- {{answer.answer}}
             <q-badge class="q-ma-xs"
-                     v-if="selectedAnswer === answer"
+                     v-if="isSameAnswer(selectedAnswer, answer)"
                      color="primary"
                      :floating="false"
                      label="you"></q-badge>
