@@ -39,6 +39,7 @@ const currentState = computed(() => (
 ));
 
 const sendQuestion = async () => {
+  if (question.value.trim() === '') return;
   await QuestionAdd.execute(
     gameContent.value.gameId,
     playerName.value,
@@ -52,6 +53,7 @@ watch(gameContent, (newGameContent) => {
     question.value = newGameContent.questions[playerName.value].question;
   }
 });
+
 </script>
 <template>
   <div class="q-ma-md">
@@ -69,6 +71,9 @@ watch(gameContent, (newGameContent) => {
           v-model="question"
           outlined
           autogrow
+          required
+          autofocus
+          :rules="[val => !!val || 'Field is required']"
           class="q-mb-md"
           :readonly="currentState !== STATES.NOT_SENT"
       />

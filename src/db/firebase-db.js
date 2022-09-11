@@ -72,7 +72,7 @@ const restart = async (gameId, numberOfPlayers, lang) => {
   await setDoc(theDoc, {
     gameId,
     numberOfPlayers,
-    lang
+    lang,
   });
 };
 export default {
