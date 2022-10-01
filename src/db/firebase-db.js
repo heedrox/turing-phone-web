@@ -83,7 +83,7 @@ const addGameId = async (gameId, hashPin, lang) => {
     gameId,
     numberOfPlayers: 0,
     lang,
-    hashPin
+    hashPin,
   });
 };
 
@@ -96,5 +96,5 @@ export default {
   setResults,
   setScore,
   restart,
-  addGameId
+  addGameId,
 };

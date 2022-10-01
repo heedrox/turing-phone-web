@@ -1,24 +1,25 @@
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import db from '../db';
 import hash from '../lib/hash';
-import { useRouter } from 'vue-router'
 
 const code = ref('');
-const pin = ref('')
+const pin = ref('');
 const lang = ref('en');
-const router = useRouter()
+const router = useRouter();
 
 const createCode = async () => {
   if (!code.value) return;
   if (pin.value.toString().length !== 4) return;
   const previousGame = await db.getGame(code.value, { });
   if (previousGame.gameId === code.value) {
-    alert('Code already exists, try another code')
+    // eslint-disable-next-line no-alert
+    alert('Code already exists, try another code');
     return;
   }
   await db.addGameId(code.value, hash(pin.value), lang.value);
-  await router.push({name: 'JoinPage', params: { gameId: code.value }})
+  await router.push({ name: 'JoinPage', params: { gameId: code.value } });
 };
 </script>
 <template>
