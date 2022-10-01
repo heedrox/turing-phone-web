@@ -76,6 +76,17 @@ const restart = async (gameId, numberOfPlayers, lang) => {
     lang,
   });
 };
+
+const addGameId = async (gameId, hashPin, lang) => {
+  const theDoc = await doc(db, `games/${gameId}`);
+  await setDoc(theDoc, {
+    gameId,
+    numberOfPlayers: 0,
+    lang,
+    hashPin
+  });
+};
+
 export default {
   init,
   getGame,
@@ -85,4 +96,5 @@ export default {
   setResults,
   setScore,
   restart,
+  addGameId
 };

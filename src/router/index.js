@@ -2,10 +2,12 @@ import { createRouter, createWebHistory } from 'vue-router';
 import StartGame from '../pages/GamePage.vue';
 import HomePage from '../pages/HomePage.vue';
 import CodePage from '../pages/CodePage.vue';
+import JoinPage from '../pages/JoinPage.vue';
 
 const routes = [
   { path: '/', component: HomePage },
-  { path: '/enter-code', component: CodePage },
+  { path: '/create', component: CodePage },
+  { path: '/game/:gameId', component: JoinPage, name: 'JoinPage' },
   { path: '/game/:gameId/:playerName/start', component: StartGame },
 ];
 

@@ -1,6 +1,6 @@
 <script setup>
 import {
-  toRefs, ref, computed, defineEmits,
+  toRefs, ref, computed
 } from 'vue';
 import prettyName from '../../lib/pretty-name';
 import hashString from '../../lib/hash-string';
