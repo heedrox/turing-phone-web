@@ -87,6 +87,16 @@ const addGameId = async (gameId, hashPin, lang) => {
   });
 };
 
+const addPlayer = async (gameId, playerName) => {
+  const theDoc = await doc(db, `games/${gameId}`);
+  const docSnap = await getDoc(theDoc);
+
+  await updateDoc(theDoc, {
+    players: arrayUnion(playerName),
+    numberOfPlayers: docSnap.data().players ? (docSnap.data().players.length + 1) : 1,
+  });
+};
+
 export default {
   init,
   getGame,
@@ -97,4 +107,5 @@ export default {
   setScore,
   restart,
   addGameId,
+  addPlayer,
 };
