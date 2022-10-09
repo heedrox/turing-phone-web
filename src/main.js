@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import { Quasar } from 'quasar';
 import App from './App.vue';
 import router from './router';
+import i18n from './i18n';
 // Import icon libraries
 import '@quasar/extras/roboto-font/roboto-font.css';
 import '@quasar/extras/material-icons/material-icons.css';
@@ -11,6 +12,7 @@ import 'quasar/src/css/index.sass';
 
 createApp(App)
   .use(router)
+  .use(i18n)
   .use(Quasar, {
     plugins: {},
     /*

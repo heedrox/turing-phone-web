@@ -1,5 +1,5 @@
 <script setup>
-import QuestionForm from '../components/QuestionForm.vue';
+import QuestionForm from '../components/question-form/QuestionForm.vue';
 import QuestionsToAnswer from '../components/questions-to-answer/QuestionsToAnswer.vue';
 import QuestionsDetection from '../components/questions-to-detect/QuestionsDetection.vue';
 import SeeResults from '../components/SeeResults.vue';

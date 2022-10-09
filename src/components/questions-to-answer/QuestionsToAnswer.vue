@@ -40,29 +40,16 @@ watch(gameContent, (newGameContent) => {
 </script>
 <template>
   <div class="q-ma-md">
-    <div v-if="currentState === STATES.LOADED">
-      <q-linear-progress size="30px"
-                         :value="numberOfQuestionsSent / numberOfPlayers"
-                         color="primary"
-                         class="q-mt-sm">
-        <div class="absolute-full flex flex-center">
-          <q-badge color="white"
-                   text-color="primary"
-                   :label="`Total questions sent:
-                   ${numberOfQuestionsSent } / ${ numberOfPlayers }`"/>
-        </div>
-      </q-linear-progress>
-      <div v-if="numberOfQuestionsSent > 0">
-        <h6 class="q-mb-none q-mt-lg">Answer these questions:</h6>
-        <QuestionToAnswer
-            v-for="question in sortedQuestions"
-            :question="question"
-            :playerName="playerName"
-            :gameId="gameContent.gameId"
-            :number-of-players="numberOfPlayers"
-            :key="question.playerName"
-        />
-      </div>
+    <div v-if="currentState === STATES.LOADED && numberOfQuestionsSent > 0">
+      <h6 class="q-mb-none q-mt-lg">Answer these questions:</h6>
+      <QuestionToAnswer
+          v-for="question in sortedQuestions"
+          :question="question"
+          :playerName="playerName"
+          :gameId="gameContent.gameId"
+          :number-of-players="numberOfPlayers"
+          :key="question.playerName"
+      />
     </div>
   </div>
 </template>

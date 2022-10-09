@@ -2,8 +2,9 @@
 import {
   ref, toRefs, computed, watch,
 } from 'vue';
-import QuestionAdd from '../use-cases/question-add';
-import prettyName from '../lib/pretty-name';
+import QuestionAdd from '../../use-cases/question-add';
+import prettyName from '../../lib/pretty-name';
+import QuestionsAddedProgressBar from './QuestionsAddedProgressBar.vue';
 
 const STATES = {
   NOT_LOADED: 'NOT_LOADED',
@@ -86,6 +87,7 @@ watch(gameContent, (newGameContent) => {
           outlined
           v-if="currentState === STATES.NOT_SENT"
       />
+      <QuestionsAddedProgressBar :game-content="gameContent" />
     </div>
   </div>
 </template>
