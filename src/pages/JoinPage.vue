@@ -50,7 +50,7 @@ const join = async () => {
 };
 </script>
 <template>
-  <q-page style="max-width: 32rem; margin:auto;">
+  <q-page class="q-px-md" style="max-width: 32rem; margin:auto;">
     <h6 class="q-mb-none q-mt-lg">Code: {{  route.params.gameId  }}</h6>
     <p>To enter in the game, enter your name and the PIN.</p>
     <q-input required class="q-mb-md" v-model="name" outlined label="Enter your name"

@@ -23,7 +23,7 @@ const createCode = async () => {
 };
 </script>
 <template>
-  <q-page style="max-width: 32rem; margin:auto;">
+  <q-page class="q-px-md" style="max-width: 32rem; margin:auto;">
     <h6 class="q-mb-none q-mt-lg">Configure your settings</h6>
     <p>Enter the following info to generate a code to play. </p>
     <q-input required class="q-mb-md" v-model="code" outlined label="Enter the code"
