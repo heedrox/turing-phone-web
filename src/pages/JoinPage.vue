@@ -41,7 +41,7 @@ const join = async () => {
     return;
   }
   if (!name.value) return;
-  if (game.value.players.map((x) => x.toLowerCase()).includes(name.value.toLowerCase())) {
+  if (game.value.players?.map((x) => x.toLowerCase()).includes(name.value.toLowerCase())) {
     router.push(`/game/${gameId}/${name.value}/start`);
     return;
   }
